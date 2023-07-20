@@ -1,1 +1,3 @@
 # Void-linux
+
+Something useful about Void Linux...
