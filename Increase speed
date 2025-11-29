@@ -1,9 +1,9 @@
 BBR makes a huge difference. Activate it. Use putty to apply these settings. 
 
-```echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.d/60-custom.conf
+echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.d/60-custom.conf
 
 echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a /etc/sysctl.d/60-custom.conf
 
 sudo sysctl -p /etc/sysctl.d/60-custom.conf
 
-sudo ip link set dev ens3 mtu 1500```
+sudo ip link set dev ens3 mtu 1500
