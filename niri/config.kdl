@@ -1,0 +1,137 @@
+// ~/.config/niri/config.kdl
+// Минимальный рабочий конфиг niri под связку foot + fuzzel + noctalia.
+// Проверить синтаксис после правок:  niri validate
+// Конфиг перечитывается на лету — просто сохраните файл.
+
+// --- Автозапуск оболочки noctalia (панель, трей, обои, лаунчер-меню) ---
+spawn-at-startup "noctalia"
+spawn-at-startup "pipewire"
+spawn-at-startup "pipewire-pulse"
+spawn-at-startup "wireplumber"
+spawn-at-startup "udiskie"
+spawn-at-startup "asusd-user"
+// Клиентские рамки окон отключаем — niri рисует свои
+prefer-no-csd
+
+// --- Переменные окружения для запускаемых процессов ---
+environment {
+    QT_QPA_PLATFORM "wayland"
+    MOZ_ENABLE_WAYLAND "1"
+    XCURSOR_THEME "Bibata-Modern-Amber"
+    XCURSOR_SIZE "24"
+    
+    
+    XDG_CURRENT_DESKTOP "sway"
+
+}
+
+// --- Курсор (без темы будет гигантский чёрный курсор по умолчанию) ---
+// Требуется пакет adwaita-icon-theme:  sudo xbps-install adwaita-icon-theme
+cursor {
+    xcursor-theme "Bibata-Modern-Amber"
+    xcursor-size 24
+}
+
+// --- Ввод ---
+input {
+    keyboard {
+        xkb {
+            layout "us,ru"
+            options "grp:alt_shift_toggle"
+        }
+    }
+    touchpad {
+        tap
+        natural-scroll
+    }
+    // На реальном железе можно включить, если мышь «ускоряется»:
+    // mouse { accel-profile "flat" }
+}
+
+// --- Раскладка окон ---
+layout {
+    gaps 8
+    border {
+        width 2
+    }
+}
+
+// --- Клавиши. Mod = Super (Windows). В настоящей сессии это ВСЕГДА Super. ---
+binds {
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // Запуск программ
+    Mod+T      { spawn "kitty"; }
+    Mod+Return { spawn "kitty"; }
+    Mod+D      { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+
+    // Окна
+    Mod+Q { close-window; }
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+
+    // Фокус
+    Mod+Left  { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up    { focus-window-up; }
+    Mod+Down  { focus-window-down; }
+    Mod+H     { focus-column-left; }
+    Mod+L     { focus-column-right; }
+    Mod+K     { focus-window-up; }
+    Mod+J     { focus-window-down; }
+
+    // Перемещение окон/колонок
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Right { move-column-right; }
+
+    // Рабочие столы
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+
+    // Ширина колонки
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+
+    // Скриншот (встроенный UI niri)
+    Print { screenshot; }
+
+    // Блокировка и выход
+    Mod+Escape { spawn "swaylock"; }
+    Mod+Shift+E { quit; }
+
+    // Регулировка громкости
+    XF86AudioRaiseVolume  allow-when-locked=true { spawn "noctalia" "msg" "volume-up"; }
+    XF86AudioLowerVolume  allow-when-locked=true { spawn "noctalia" "msg" "volume-down"; }
+    XF86AudioMute         allow-when-locked=true { spawn "noctalia" "msg" "volume-mute"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "noctalia" "msg" "brightness-up"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia" "msg" "brightness-down"; }
+
+     // область → редактор swappy
+    Mod+Shift+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | swappy -f -"; }
+    // весь экран → редактор swappy
+    Mod+P  { spawn "sh" "-c" "grim - | swappy -f -"; }
+
+     // СТОП записи (посылает Ctrl+C процессу wf-recorder)
+    Mod+X { spawn "pkill" "-INT" "wf-recorder"; }
+    Mod+R { spawn "sh" "-c" "wf-recorder -a=alsa_output.pci-0000_00_1f.3.analog-stereo.monitor --audio-codec aac --audio-bitrate 192k -f ~/Videos/rec-$(date +%F-%H%M%S).mp4"; }
+    
+    // Переключение профилей кулеров (Fn+F5)
+    XF86Launch4 { spawn "sh" "-c" "notify-send 'Термопрофиль' \"$(asusctl profile next)\""; }
+    
+    // Запасной вариант, если XF86Launch4 не сработает (например, Mod + F5)
+    Mod+F5 { spawn "sh" "-c" "notify-send 'Термопрофиль' \"$(asusctl profile next)\""; }
+
+}
+
+hotkey-overlay {
+    skip-at-startup
+    hide-not-bound
+}
+
+include "noctalia.kdl"
