@@ -1,0 +1,159 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](color_orange)\
+$os\
+$username\
+[](bg:color_yellow fg:color_orange)\
+$directory\
+[](fg:color_yellow bg:color_aqua)\
+$git_branch\
+$git_status\
+[](fg:color_aqua bg:color_blue)\
+$c\
+$cpp\
+$rust\
+$golang\
+$nodejs\
+$bun\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+[](fg:color_blue bg:color_bg3)\
+$docker_context\
+$conda\
+$pixi\
+[](fg:color_bg3 bg:color_bg1)\
+$time\
+[ ](fg:color_bg1)\
+$line_break$character"""
+
+palette = 'outtatime'
+
+[palettes.outtatime]
+color_fg0    = '#f5ede0'   # moon cream — text on segments
+color_bg1    = '#14151f'   # night navy — clock segment
+color_bg3    = '#242637'   # surface    — docker/conda segment
+color_blue   = '#4fc3f7'   # electric   — languages
+color_aqua   = '#5fd6c8'   # flux teal  — git
+color_green  = '#9ccf5a'
+color_orange = '#ff6a1a'   # flame      — os / user (first segment)
+color_purple = '#c77dff'
+color_red    = '#ff3b30'   # taillight  — errors
+color_yellow = '#e7c98e'   # rim gold   — directory
+
+
+[os]
+disabled = false
+style = "bg:color_orange fg:color_bg1"        # navy penguin on flame
+[os.symbols]
+Void = "󰌽"
+ 
+[username]
+show_always = true
+style_user = "bg:color_orange fg:color_bg1"   # navy on flame
+style_root = "bg:color_orange fg:color_bg1"
+format = '[ $user ]($style)'
+ 
+[directory]
+style = "bg:color_yellow fg:color_bg1"         # navy on gold — was the worst offender
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+style = "bg:color_aqua fg:color_bg1"           # navy on teal
+symbol = ""
+format = '[ $symbol $branch ]($style)'
+ 
+[git_status]
+style = "bg:color_aqua fg:color_bg1"
+format = '[$all_status$ahead_behind ]($style)'
+
+[c]
+style = "bg:color_blue fg:color_bg1"
+symbol = " "
+format = '[ $symbol( $version) ]($style)'
+ 
+[cpp]
+style = "bg:color_blue fg:color_bg1"
+symbol = " "
+format = '[ $symbol( $version) ]($style)'
+ 
+[rust]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[golang]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[nodejs]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[bun]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[php]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[java]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[kotlin]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[haskell]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+[python]
+style = "bg:color_blue fg:color_bg1"
+symbol = ""
+format = '[ $symbol( $version) ]($style)'
+ 
+# Dark segments keep CREAM text (navy would vanish here)
+[docker_context]
+style = "bg:color_bg3 fg:color_fg0"
+symbol = ""
+format = '[ $symbol( $context) ]($style)'
+ 
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:color_bg1"
+format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[](bold fg:color_green)'
+error_symbol = '[](bold fg:color_red)'
+vimcmd_symbol = '[](bold fg:color_green)'
+vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
+vimcmd_replace_symbol = '[](bold fg:color_purple)'
+vimcmd_visual_symbol = '[](bold fg:color_yellow)'
