@@ -39,7 +39,8 @@ cursor {
 
 // --- Ввод ---
 input {
-    keyboard {
+  focus-follows-mouse max-scroll-amount="0%"
+  keyboard {
         xkb {
             layout "us,ru"
             options "grp:alt_shift_toggle"
@@ -55,13 +56,11 @@ input {
 
 // --- Раскладка окон ---
 layout {
-    gaps 8
-    center-focused-column "never"
+    gaps 10
     border {
-        width 2
+        off
     }
 }
-
 // --- Клавиши. Mod = Super (Windows). В настоящей сессии это ВСЕГДА Super. ---
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -138,14 +137,62 @@ output "DP-2" {
   }
 
 
+// скругления — для ВСЕХ окон (без match)
 window-rule {
-  match app-id="firefox"
-  open-maximized true
+    geometry-corner-radius 20
+    clip-to-geometry true
 }
 
+// Firefox — только на всю ширину
 window-rule {
-  geometry-corner-radius 20
-  clip-to-geometry true
+    match app-id="Firefox"
+    open-maximized true
+    default-column-width { proportion 1.0; }
+}
+
+
+
+animations {
+    // общий множитель скорости; <1.0 = быстрее (динамичнее)
+    slowdown 0.8
+
+    // Открытие окна — резкий «выпрыг» из прошлого
+    window-open {
+        duration-ms 500
+        curve "ease-out-expo"
+    }
+
+    // Закрытие — схлопывание во времени
+    window-close {
+        duration-ms 200
+        curve "ease-out-quad"
+    }
+
+    // Переключение рабочих столов — «разгон до 88 миль», пружина с перелётом
+    workspace-switch {
+        spring damping-ratio=0.7 stiffness=1000 epsilon=0.0001
+    }
+
+    // Движение по ленте колонок — упругий отклик
+    horizontal-view-movement {
+        spring damping-ratio=0.7 stiffness=800 epsilon=0.0001
+    }
+
+    // Перемещение окна в колонке
+    window-movement {
+        spring damping-ratio=0.7 stiffness=900 epsilon=0.0001
+    }
+
+    // Резайз окна — быстрый, без желе
+    window-resize {
+        duration-ms 500
+        curve "ease-out-expo"
+    }
+
+    // Появление/скрытие конфига (hotkey overlay и т.п.)
+    config-notification-open-close {
+        spring damping-ratio=0.7 stiffness=1000 epsilon=0.001
+    }
 }
 
 include "noctalia.kdl"
