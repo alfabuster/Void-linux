@@ -4,12 +4,17 @@
 // Конфиг перечитывается на лету — просто сохраните файл.
 
 // --- Автозапуск оболочки noctalia (панель, трей, обои, лаунчер-меню) ---
-spawn-at-startup "noctalia"
+spawn-at-startup "sh" "-c" "sleep 0.1 && noctalia"
 spawn-at-startup "pipewire"
 spawn-at-startup "pipewire-pulse"
 spawn-at-startup "wireplumber"
 spawn-at-startup "udiskie"
-spawn-at-startup "asusd-user"
+spawn-at-startup "/home/den/.config/niri/autostart.sh"
+spawn-at-startup "mpd"
+spawn-at-startup "mpdris2-rs"
+spawn-at-startup "/home/den/.config/mpd/cover-daemon.sh"
+spawn-at-startup "sh" "-c" "sleep 3; exec mpdscribble --no-daemon"
+spawn-at-startup "openrgb" "--profile" "outtatime"
 // Клиентские рамки окон отключаем — niri рисует свои
 prefer-no-csd
 
@@ -51,6 +56,7 @@ input {
 // --- Раскладка окон ---
 layout {
     gaps 8
+    center-focused-column "never"
     border {
         width 2
     }
@@ -102,7 +108,7 @@ binds {
     Print { screenshot; }
 
     // Блокировка и выход
-    Mod+Escape { spawn "swaylock"; }
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+E { quit; }
 
     // Регулировка громкости
@@ -118,20 +124,28 @@ binds {
     Mod+P  { spawn "sh" "-c" "grim - | swappy -f -"; }
 
      // СТОП записи (посылает Ctrl+C процессу wf-recorder)
-    Mod+X { spawn "pkill" "-INT" "wf-recorder"; }
-    Mod+R { spawn "sh" "-c" "wf-recorder -a=alsa_output.pci-0000_00_1f.3.analog-stereo.monitor --audio-codec aac --audio-bitrate 192k -f ~/Videos/rec-$(date +%F-%H%M%S).mp4"; }
-    
-    // Переключение профилей кулеров (Fn+F5)
-    XF86Launch4 { spawn "sh" "-c" "notify-send 'Термопрофиль' \"$(asusctl profile next)\""; }
-    
-    // Запасной вариант, если XF86Launch4 не сработает (например, Mod + F5)
-    Mod+F5 { spawn "sh" "-c" "notify-send 'Термопрофиль' \"$(asusctl profile next)\""; }
-
-}
+    Mod+X { spawn "sh" "-c" "pkill -INT wf-recorder && notify-send -t 3000 'Запись экрана' 'Запись остановлена и сохранена!'"; }
+    Mod+R { spawn "sh" "-c" "notify-send -t 3000 'Запись экрана' 'Запись началась 🔴' && wf-recorder -a=$(pactl get-default-sink).monitor --audio-codec aac --audio-bitrate 192k -f ~/Videos/rec-$(date +%F-%H%M%S).mp4"; }
+  }
 
 hotkey-overlay {
     skip-at-startup
     hide-not-bound
+}
+
+output "DP-2" {
+    mode "1920x1080@144.002"
+  }
+
+
+window-rule {
+  match app-id="firefox"
+  open-maximized true
+}
+
+window-rule {
+  geometry-corner-radius 20
+  clip-to-geometry true
 }
 
 include "noctalia.kdl"
