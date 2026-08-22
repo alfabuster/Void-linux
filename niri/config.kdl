@@ -1,3 +1,5 @@
+include "noctalia.kdl"
+include "anim.kdl"
 // ~/.config/niri/config.kdl
 // Минимальный рабочий конфиг niri под связку foot + fuzzel + noctalia.
 // Проверить синтаксис после правок:  niri validate
@@ -150,49 +152,15 @@ window-rule {
     default-column-width { proportion 1.0; }
 }
 
-
-
-animations {
-    // общий множитель скорости; <1.0 = быстрее (динамичнее)
-    slowdown 0.8
-
-    // Открытие окна — резкий «выпрыг» из прошлого
-    window-open {
-        duration-ms 500
-        curve "ease-out-expo"
-    }
-
-    // Закрытие — схлопывание во времени
-    window-close {
-        duration-ms 200
-        curve "ease-out-quad"
-    }
-
-    // Переключение рабочих столов — «разгон до 88 миль», пружина с перелётом
-    workspace-switch {
-        spring damping-ratio=0.7 stiffness=1000 epsilon=0.0001
-    }
-
-    // Движение по ленте колонок — упругий отклик
-    horizontal-view-movement {
-        spring damping-ratio=0.7 stiffness=800 epsilon=0.0001
-    }
-
-    // Перемещение окна в колонке
-    window-movement {
-        spring damping-ratio=0.7 stiffness=900 epsilon=0.0001
-    }
-
-    // Резайз окна — быстрый, без желе
-    window-resize {
-        duration-ms 500
-        curve "ease-out-expo"
-    }
-
-    // Появление/скрытие конфига (hotkey overlay и т.п.)
-    config-notification-open-close {
-        spring damping-ratio=0.7 stiffness=1000 epsilon=0.001
-    }
+window-rule {
+    // Применяем правило именно к окнам запущенных виртуальных машин
+    match app-id=r#"VirtualBox Machine"#
+    
+    // Заставляем окно занимать 100% ширины монитора при открытии
+    default-column-width { proportion 1.0; }
+    
+    // Опционально: можно сразу заставить окно открываться в фуллскрине
+    // open-fullscreen true
 }
 
-include "noctalia.kdl"
+

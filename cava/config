@@ -1,0 +1,37 @@
+## OUTTA TIME — Back to the Future cava theme
+## Gradient rises like the DeLorean's exhaust: deep navy → electric blue → gold → flame → taillight red
+
+[general]
+framerate = 60
+autosens = 1
+bars = 0
+bar_width = 2
+bar_spacing = 1
+
+[input]
+method = pulse
+source = auto
+
+[output]
+method = ncurses
+channels = stereo
+mono_option = average
+
+[color]
+theme = "noctalia"
+## Gradient mode needs ncurses output + a hex (or commented) background.
+## Deep navy matches the OuttaTime surface so bars sit on night sky.
+background = '#14151f'
+
+## Vertical gradient — bottom (quiet) to top (peak)
+gradient = 1
+gradient_count = 6
+gradient_color_1 = '#1a1b26'
+gradient_color_2 = '#4fc3f7'
+gradient_color_3 = '#e7c98e'
+gradient_color_4 = '#ff6a1a'
+gradient_color_5 = '#ff3b30'
+gradient_color_6 = '#f7365a'
+
+[smoothing]
+noise_reduction = 0.77
